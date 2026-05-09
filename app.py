@@ -105,7 +105,7 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
             - 'risoluzione_sintetica': (la sintesi della risoluzione corretta)
             """
             
-            model = genai.GenerativeModel('gemini-2.0-flash')
+            model = genai.GenerativeModel('models/gemini-1.5-flash')
             for attempt in range(3):
                 try:
                     response = model.generate_content(prompt_docente)
