@@ -23,8 +23,7 @@ try:
     private_key_b64 = st.secrets["connections"]["gsheets"]["private_key_base64"]
     private_key_pem = base64.b64decode(private_key_b64).decode("utf-8")
     
-    # 2. Ricostruiamo il dizionario completo delle credenziali attingendo dai Secrets
-    # (Rimuoviamo "type": "service_account" per evitare la collisione con st.connection)
+    # 2. Ricostruiamo il dizionario delle credenziali (senza 'type' e senza 'spreadsheet')
     credenziali_complete = {
         "project_id": st.secrets["connections"]["gsheets"]["project_id"],
         "private_key_id": st.secrets["connections"]["gsheets"]["private_key_id"],
@@ -37,15 +36,16 @@ try:
         "client_x509_cert_url": st.secrets["connections"]["gsheets"]["client_x509_cert_url"]
     }
     
-    # 3. Avviamo la connessione passando esplicitamente i parametri
+    # 3. Inizializziamo la connessione passando SOLO i parametri del Service Account
     conn = st.connection(
         "gsheets", 
         type=GSheetsConnection,
-        spreadsheet=st.secrets["connections"]["gsheets"]["spreadsheet"],
-        **credenziali_complete  # Ora non c'è più conflitto sul parametro 'type'!
+        **credenziali_complete
     )
     
-    df = conn.read(ttl="0")
+    # 4. Passiamo l'URL del foglio Google esplicitamente dentro conn.read()
+    url_foglio = st.secrets["connections"]["gsheets"]["spreadsheet"]
+    df = conn.read(spreadsheet=url_foglio, ttl="0")
     
     # Sanitizzazione dei dati in lettura
     df["Percentuale sicurezza"] = pd.to_numeric(df["Percentuale sicurezza"], errors="coerce")
