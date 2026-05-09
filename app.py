@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
-import google.generativeai as genai
+from google import genai
 from google.api_core.exceptions import ResourceExhausted
 import json
 import random
@@ -14,7 +14,7 @@ st.set_page_config(
 )
 
 # 2. Configurazione delle API (Recuperate in sicurezza dai Secrets di Streamlit)
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 # 3. Connessione a Google Sheets
 # Utilizza la libreria nativa di Streamlit per leggere/scrivere sul foglio Google
@@ -105,10 +105,13 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
             - 'risoluzione_sintetica': (la sintesi della risoluzione corretta)
             """
             
-            model = genai.GenerativeModel('models/gemini-1.5-flash')
+            
             for attempt in range(3):
                 try:
-                    response = model.generate_content(prompt_docente)
+                    response = client.models.generate_content(
+                            model='gemini-2.5-flash',
+                            contents=prompt_docente
+                        )
                     break
                 except ResourceExhausted:
                     if attempt < 2:
