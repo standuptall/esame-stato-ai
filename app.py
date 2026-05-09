@@ -1,12 +1,10 @@
 import streamlit as st
-import gspread
-from google.oauth2.service_account import Credentials
 from google import genai
 import json
 import random
 import time
 import pandas as pd
-import base64
+import os
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
@@ -15,53 +13,30 @@ st.set_page_config(
     layout="centered"
 )
 
-# 2. Configurazione delle API (Recuperate in sicurezza dai Secrets di Streamlit)
+# 2. Configurazione delle API
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
-# 3. Connessione a Google Sheets tramite gspread
-try:
-    # Legge tutti i campi del service account direttamente dai secrets
-    gsheets_secrets = dict(st.secrets["connections"]["gsheets"])
-    url_foglio = gsheets_secrets.pop("spreadsheet")
-    # Decodifica la chiave privata da Base64 e la aggiunge come campo standard
-    private_key_b64 = gsheets_secrets.pop("private_key_base64")
-    gsheets_secrets["private_key"] = base64.b64decode(private_key_b64.strip()).decode("utf-8")
-    gsheets_secrets.setdefault("type", "service_account")
-    
-    scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-    creds = Credentials.from_service_account_info(gsheets_secrets, scopes=scopes)
-    gc = gspread.authorize(creds)
-    
-    worksheet = gc.open_by_url(url_foglio).get_worksheet(0)
-    df = pd.DataFrame(worksheet.get_all_records())
-    
-    # Sanitizzazione dei dati in lettura
-    df["Percentuale sicurezza"] = pd.to_numeric(df["Percentuale sicurezza"], errors="coerce")
+# 3. Caricamento dati da file CSV locale
+CSV_PATH = os.path.join(os.path.dirname(__file__), "quesiti.csv")
+
+def carica_dati():
+    df = pd.read_csv(CSV_PATH, dtype={"Percentuale sicurezza": float})
     df["Percentuale sicurezza"] = df["Percentuale sicurezza"].fillna(0).astype(int)
-    
-except Exception as e:
-    st.write(str(e))
-    st.error("Errore di connessione al database Google Sheets. Verifica le credenziali.")
-    st.stop()
+    df["Risoluzione"] = df["Risoluzione"].fillna("")
+    return df
+
+def salva_dati(df):
+    df.to_csv(CSV_PATH, index=False)
+
+df = carica_dati()
 
 # 4. Selezione del Quesito (Interfaccia Mobile-Friendly)
 st.title("🎓 Preparatore Esame di Stato")
 st.write("Il programma estrae automaticamente un quesito, dando priorità agli argomenti meno studiati.")
 
 # Calcolo dei pesi per l'estrazione pesata
-percentuali = (
-    df["Percentuale sicurezza"]
-    .astype(str)
-    .str.replace("%", "", regex=False)
-    .str.replace(",", ".", regex=False)
-    .str.strip()
-    .replace("nan", "0")
-    .replace("", "0")
-    .astype(float)
-    .fillna(0)
-    .clip(0, 100)
-)
-pesi = (100 - percentuali + 1).tolist()  # peso minimo 1 (100%), massimo 101 (0%/NaN)
+percentuali = df["Percentuale sicurezza"].clip(0, 100)
+pesi = (100 - percentuali + 1).tolist()  # peso minimo 1 (100%), massimo 101 (0%)
 
 def estrai_quesito():
     st.session_state.indice_quesito = random.choices(range(len(df)), weights=pesi, k=1)[0]
@@ -86,7 +61,7 @@ st.markdown("### Testo del Quesito:")
 st.info(riga_corrente["Quesito"])
 
 # Mostra la risoluzione precedentemente salvata (se esiste)
-if str(riga_corrente["Risoluzione"]) != "nan" and str(riga_corrente["Risoluzione"]).strip() != "":
+if str(riga_corrente["Risoluzione"]).strip() not in ("", "nan"):
     with st.expander("Visualizza risoluzione registrata"):
         st.write(riga_corrente["Risoluzione"])
 
@@ -106,8 +81,7 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
         st.warning("Inserisci una risposta prima di inviare.")
     else:
         with st.spinner("Il docente sta valutando la tua risposta..."):
-            
-            # Prompt di sistema strutturato per ottenere un output deterministico (JSON) alla fine
+
             prompt_docente = f"""
             Sei un severo Professore Universitario e Presidente della Commissione per l'Abilitazione alla professione di Ingegnere.
             Valuta la risposta del candidato al seguente quesito.
@@ -124,7 +98,7 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
             - 'nuova_percentuale': (il valore numerico intero)
             - 'risoluzione_sintetica': (la sintesi della risoluzione corretta)
             """
-            
+
             response = None
             for attempt in range(3):
                 try:
@@ -134,7 +108,6 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
                     )
                     break
                 except Exception as e:
-                    # Riconosce l'errore di quota esaurita analizzando la stringa dell'errore
                     errore_str = str(e)
                     if "429" in errore_str or "ResourceExhausted" in errore_str or "exhausted" in errore_str.lower():
                         if attempt < 2:
@@ -147,36 +120,29 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
                     else:
                         st.error(f"Si è verificato un errore imprevisto con le API di Google: {e}")
                         st.stop()
-            
-            # Parsing della risposta (cercando il JSON all'interno del testo generato)
+
             if response:
                 try:
-                    # Estrazione del JSON
                     testo_risposta = response.text
                     inizio_json = testo_risposta.find("{")
                     fine_json = testo_risposta.rfind("}") + 1
                     dati_valutazione = json.loads(testo_risposta[inizio_json:fine_json])
-                    
-                    # Mostra la valutazione a schermo
+
                     st.subheader("Valutazione del Docente:")
                     st.write(dati_valutazione['valutazione_testo'])
-                    
-                    # Recupero dati per l'aggiornamento
-                    nuova_percentuale = dati_valutazione['nuova_percentuale']
+
+                    nuova_percentuale = int(dati_valutazione['nuova_percentuale'])
                     risoluzione_corretta = dati_valutazione['risoluzione_sintetica']
-                    
-                    # Aggiornamento diretto delle celle nel foglio Google
-                    intestazioni = df.columns.tolist()
-                    col_perc = intestazioni.index("Percentuale sicurezza") + 1
-                    col_risol = intestazioni.index("Risoluzione") + 1
-                    riga_sheet = indice_riga + 2  # +1 per header, +1 per indice 1-based
-                    worksheet.update_cell(riga_sheet, col_perc, nuova_percentuale)
-                    worksheet.update_cell(riga_sheet, col_risol, str(risoluzione_corretta))
-                    
-                    st.success(f"Aggiornamento completato! Nuova percentuale di sicurezza registrata sul foglio: {nuova_percentuale}%")
-                    
+
+                    # Aggiornamento e salvataggio nel CSV
+                    df.at[indice_riga, "Percentuale sicurezza"] = nuova_percentuale
+                    df.at[indice_riga, "Risoluzione"] = risoluzione_corretta
+                    salva_dati(df)
+
+                    st.success(f"Aggiornamento completato! Nuova percentuale di sicurezza: {nuova_percentuale}%")
+
                 except Exception as e:
-                    # Fallback nel caso in cui l'IA non formatti correttamente il JSON o ci sia un errore di rete
-                    st.warning("La valutazione è stata generata, ma non è stato possibile aggiornare automaticamente il database.")
+                    st.warning("La valutazione è stata generata, ma non è stato possibile aggiornare il database.")
                     st.write(str(e))
-                    st.write(response.text)
+                    if response:
+                        st.write(response.text)
