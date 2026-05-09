@@ -21,7 +21,7 @@ client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 # 3. Connessione a Google Sheets tramite gspread
 try:
     private_key_b64 = st.secrets["connections"]["gsheets"]["private_key_base64"]
-    private_key_pem = base64.b64decode(private_key_b64).decode("utf-8")
+    private_key_pem = base64.b64decode(private_key_b64).decode("utf-8").replace("\\n", "\n")
     
     credenziali_dict = {
         "type": "service_account",
