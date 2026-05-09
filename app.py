@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import google.generativeai as genai
 import json
+import random
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
@@ -24,15 +25,23 @@ except Exception as e:
 
 # 4. Selezione del Quesito (Interfaccia Mobile-Friendly)
 st.title("🎓 Preparatore Esame di Stato")
-st.write("Seleziona un quesito, proponi la tua soluzione e confrontati con il docente virtuale.")
+st.write("Il programma estrae automaticamente un quesito, dando priorità agli argomenti meno studiati.")
 
-# Dropdown per selezionare il quesito dall'elenco del foglio Google
-elenco_quesiti = df["Quesito"].tolist()
-quesito_selezionato = st.selectbox("Seleziona il quesito da studiare:", elenco_quesiti)
+# Calcolo dei pesi: più bassa è la percentuale (o assente), maggiore è la priorità
+percentuali = df["Percentuale sicurezza"].fillna(0).astype(float)
+pesi = (100 - percentuali + 1).tolist()  # peso minimo 1 (100%), massimo 101 (0%/NaN)
+
+def estrai_quesito():
+    st.session_state.indice_quesito = random.choices(range(len(df)), weights=pesi, k=1)[0]
+
+if "indice_quesito" not in st.session_state:
+    estrai_quesito()
+
+st.button("🎲 Estrai un nuovo quesito", on_click=estrai_quesito, use_container_width=True)
 
 # Recupero della riga corrispondente
-riga_corrente = df[df["Quesito"] == quesito_selezionato].iloc[0]
-indice_riga = df[df["Quesito"] == quesito_selezionato].index[0]
+indice_riga = st.session_state.indice_quesito
+riga_corrente = df.iloc[indice_riga]
 
 # Box informativo sullo stato attuale
 col1, col2 = st.columns(2)
