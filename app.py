@@ -20,18 +20,19 @@ client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 # 3. Connessione a Google Sheets tramite gspread
 try:
-    # Decodifica l'intero JSON del service account da Base64
-    service_account_b64 = st.secrets["connections"]["gsheets"]["service_account_json_b64"]
-    service_account_json = base64.b64decode(service_account_b64.strip()).decode("utf-8")
-    credenziali_dict = json.loads(service_account_json)
+    # Legge tutti i campi del service account direttamente dai secrets
+    gsheets_secrets = dict(st.secrets["connections"]["gsheets"])
+    url_foglio = gsheets_secrets.pop("spreadsheet")
+    # Decodifica la chiave privata da Base64 e la aggiunge come campo standard
+    private_key_b64 = gsheets_secrets.pop("private_key_base64")
+    gsheets_secrets["private_key"] = base64.b64decode(private_key_b64.strip()).decode("utf-8")
+    gsheets_secrets.setdefault("type", "service_account")
     
     scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-    creds = Credentials.from_service_account_info(credenziali_dict, scopes=scopes)
+    creds = Credentials.from_service_account_info(gsheets_secrets, scopes=scopes)
     gc = gspread.authorize(creds)
     
-    url_foglio = st.secrets["connections"]["gsheets"]["spreadsheet"]
     worksheet = gc.open_by_url(url_foglio).get_worksheet(0)
-    
     df = pd.DataFrame(worksheet.get_all_records())
     
     # Sanitizzazione dei dati in lettura
