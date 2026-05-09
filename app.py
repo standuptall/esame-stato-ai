@@ -150,5 +150,5 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
             except Exception as e:
                 # Fallback nel caso in cui l'IA non formatti correttamente il JSON
                 st.warning("La valutazione è stata generata, ma non è stato possibile aggiornare automaticamente il database.")
-                st.write(e.message)
+                st.write(str(e))
                 st.write(response.text)
