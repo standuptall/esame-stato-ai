@@ -24,9 +24,8 @@ try:
     private_key_pem = base64.b64decode(private_key_b64).decode("utf-8")
     
     # 2. Ricostruiamo il dizionario completo delle credenziali attingendo dai Secrets
-    # e inserendo la chiave PEM decodificata al volo
+    # (Rimuoviamo "type": "service_account" per evitare la collisione con st.connection)
     credenziali_complete = {
-        "type": "service_account",
         "project_id": st.secrets["connections"]["gsheets"]["project_id"],
         "private_key_id": st.secrets["connections"]["gsheets"]["private_key_id"],
         "private_key": private_key_pem,
@@ -43,7 +42,7 @@ try:
         "gsheets", 
         type=GSheetsConnection,
         spreadsheet=st.secrets["connections"]["gsheets"]["spreadsheet"],
-        **credenziali_complete  # Scompatta il dizionario di credenziali corrette
+        **credenziali_complete  # Ora non c'è più conflitto sul parametro 'type'!
     )
     
     df = conn.read(ttl="0")
