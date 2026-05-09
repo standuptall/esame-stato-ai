@@ -1,11 +1,10 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from google import genai
-from google.api_core.exceptions import ResourceExhausted
 import json
 import random
 import time
-import pandas as pd  # <--- ASSICURATI CHE QUESTA RIGA SIA PRESENTE
+import pandas as pd
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
@@ -18,16 +17,14 @@ st.set_page_config(
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 # 3. Connessione a Google Sheets
-# Utilizza la libreria nativa di Streamlit per leggere/scrivere sul foglio Google
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
     df = conn.read(ttl="0") # ttl=0 forza la lettura dei dati in tempo reale
-    # --- NUOVA RIGA DI SANITIZZAZIONE ---
-    # Converte la colonna in numerica. I valori non validi (testi, spazi) diventano NaN (vuoti)
+    
+    # Sanitizzazione dei dati in lettura
     df["Percentuale sicurezza"] = pd.to_numeric(df["Percentuale sicurezza"], errors="coerce")
-    # Riempie i valori vuoti (NaN) con lo 0 di default e converte tutto in interi (int)
     df["Percentuale sicurezza"] = df["Percentuale sicurezza"].fillna(0).astype(int)
-    # ------------------------------------
+    
 except Exception as e:
     st.write(str(e))
     st.error("Errore di connessione al database Google Sheets. Verifica le credenziali.")
@@ -37,7 +34,7 @@ except Exception as e:
 st.title("🎓 Preparatore Esame di Stato")
 st.write("Il programma estrae automaticamente un quesito, dando priorità agli argomenti meno studiati.")
 
-# Calcolo dei pesi: più bassa è la percentuale (o assente), maggiore è la priorità
+# Calcolo dei pesi per l'estrazione pesata
 percentuali = (
     df["Percentuale sicurezza"]
     .astype(str)
@@ -75,7 +72,7 @@ st.markdown("### Testo del Quesito:")
 st.info(riga_corrente["Quesito"])
 
 # Mostra la risoluzione precedentemente salvata (se esiste)
-if str(riga_corrente["Risoluzione"]) != "nan":
+if str(riga_corrente["Risoluzione"]) != "nan" and str(riga_corrente["Risoluzione"]).strip() != "":
     with st.expander("Visualizza risoluzione registrata"):
         st.write(riga_corrente["Risoluzione"])
 
@@ -86,7 +83,8 @@ st.markdown("### La tua proposta di risoluzione:")
 risposta_utente = st.text_area(
     "Inserisci qui i tuoi passaggi logici, formule o considerazioni normative:",
     height=200,
-    placeholder="Scrivi qui come risolveresti il quesito..."
+    placeholder="Scrivi qui come risolveresti il quesito...",
+    key="risposta_utente_input"
 )
 
 if st.button("Sottoponi all'Agente", use_container_width=True):
@@ -113,50 +111,61 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
             - 'risoluzione_sintetica': (la sintesi della risoluzione corretta)
             """
             
-            
+            response = None
             for attempt in range(3):
                 try:
                     response = client.models.generate_content(
-                            model='gemini-2.5-flash',
-                            contents=prompt_docente
-                        )
+                        model='gemini-2.5-flash',
+                        contents=prompt_docente
+                    )
                     break
-                except ResourceExhausted:
-                    if attempt < 2:
-                        wait = 30 * (attempt + 1)
-                        st.warning(f"Limite di richieste API raggiunto. Riprovo tra {wait} secondi...")
-                        time.sleep(wait)
+                except Exception as e:
+                    # Riconosce l'errore di quota esaurita analizzando la stringa dell'errore
+                    errore_str = str(e)
+                    if "429" in errore_str or "ResourceExhausted" in errore_str or "exhausted" in errore_str.lower():
+                        if attempt < 2:
+                            wait = 30 * (attempt + 1)
+                            st.warning(f"Limite di richieste API raggiunto. Riprovo tra {wait} secondi...")
+                            time.sleep(wait)
+                        else:
+                            st.error("Quota API esaurita. Attendi qualche minuto e riprova.")
+                            st.stop()
                     else:
-                        st.error("Quota API esaurita. Attendi qualche minuto e riprova.")
+                        st.error(f"Si è verificato un errore imprevisto con le API di Google: {e}")
                         st.stop()
             
             # Parsing della risposta (cercando il JSON all'interno del testo generato)
-            try:
-                # Estrazione del JSON
-                testo_risposta = response.text
-                inizio_json = testo_risposta.find("{")
-                fine_json = testo_risposta.rfind("}") + 1
-                dati_valutazione = json.loads(testo_risposta[inizio_json:fine_json])
-                
-                # Mostra la valutazione a schermo
-                st.subheader("Valutazione del Docente:")
-                st.write(dati_valutazione['valutazione_testo'])
-                
-                # Aggiornamento dei dati locali
-                nuova_percentuale = dati_valutazione['nuova_percentuale']
-                risoluzione_corretta = dati_valutazione['risoluzione_sintetica']
-                
-                # Scrittura su Google Sheets
-                df.at[indice_riga, "Percentuale sicurezza"] = nuova_percentuale
-                df.at[indice_riga, "Risoluzione"] = risoluzione_corretta
-                
-                # Salvataggio tramite la connessione
-                conn.update(data=df)
-                
-                st.success(f"Aggiornamento completato! Nuova percentuale di sicurezza registrata sul foglio: {nuova_percentuale}%")
-                
-            except Exception as e:
-                # Fallback nel caso in cui l'IA non formatti correttamente il JSON
-                st.warning("La valutazione è stata generata, ma non è stato possibile aggiornare automaticamente il database.")
-                st.write(str(e))
-                st.write(response.text)
+            if response:
+                try:
+                    # Estrazione del JSON
+                    testo_risposta = response.text
+                    inizio_json = testo_risposta.find("{")
+                    fine_json = testo_risposta.rfind("}") + 1
+                    dati_valutazione = json.loads(testo_risposta[inizio_json:fine_json])
+                    
+                    # Mostra la valutazione a schermo
+                    st.subheader("Valutazione del Docente:")
+                    st.write(dati_valutazione['valutazione_testo'])
+                    
+                    # Recupero dati per l'aggiornamento
+                    nuova_percentuale = dati_valutazione['nuova_percentuale']
+                    risoluzione_corretta = dati_valutazione['risoluzione_sintetica']
+                    
+                    # Convertiamo temporaneamente l'intero DataFrame in stringhe per evitare 
+                    # conflitti di tipi (dtype mismatch) con la libreria gsheets e pandas durante l'upload
+                    df_upload = df.copy().astype(str)
+                    
+                    # Aggiornamento dei dati sulla copia stringa
+                    df_upload.at[indice_riga, "Percentuale sicurezza"] = str(nuova_percentuale)
+                    df_upload.at[indice_riga, "Risoluzione"] = str(risoluzione_corretta)
+                    
+                    # Salvataggio tramite la connessione (scrivendo le stringhe)
+                    conn.update(data=df_upload)
+                    
+                    st.success(f"Aggiornamento completato! Nuova percentuale di sicurezza registrata sul foglio: {nuova_percentuale}%")
+                    
+                except Exception as e:
+                    # Fallback nel caso in cui l'IA non formatti correttamente il JSON o ci sia un errore di rete
+                    st.warning("La valutazione è stata generata, ma non è stato possibile aggiornare automaticamente il database.")
+                    st.write(str(e))
+                    st.write(response.text)
