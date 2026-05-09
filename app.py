@@ -20,23 +20,10 @@ client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 # 3. Connessione a Google Sheets tramite gspread
 try:
-    private_key_b64 = st.secrets["connections"]["gsheets"]["private_key_base64"]
-    # Decodifica robusta: strip whitespace dal base64, normalizza newline e BOM
-    decoded = base64.b64decode(private_key_b64.strip()).decode("utf-8")
-    private_key_pem = decoded.replace("\\n", "\n").replace("\r\n", "\n").replace("\r", "\n").strip()
-    
-    credenziali_dict = {
-        "type": "service_account",
-        "project_id": st.secrets["connections"]["gsheets"]["project_id"],
-        "private_key_id": st.secrets["connections"]["gsheets"]["private_key_id"],
-        "private_key": private_key_pem,
-        "client_email": st.secrets["connections"]["gsheets"]["client_email"],
-        "client_id": st.secrets["connections"]["gsheets"]["client_id"],
-        "auth_uri": st.secrets["connections"]["gsheets"]["auth_uri"],
-        "token_uri": st.secrets["connections"]["gsheets"]["token_uri"],
-        "auth_provider_x509_cert_url": st.secrets["connections"]["gsheets"]["auth_provider_x509_cert_url"],
-        "client_x509_cert_url": st.secrets["connections"]["gsheets"]["client_x509_cert_url"]
-    }
+    # Decodifica l'intero JSON del service account da Base64
+    service_account_b64 = st.secrets["connections"]["gsheets"]["service_account_json_b64"]
+    service_account_json = base64.b64decode(service_account_b64.strip()).decode("utf-8")
+    credenziali_dict = json.loads(service_account_json)
     
     scopes = ["https://www.googleapis.com/auth/spreadsheets"]
     creds = Credentials.from_service_account_info(credenziali_dict, scopes=scopes)
