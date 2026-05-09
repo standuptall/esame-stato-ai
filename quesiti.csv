@@ -1,26 +1,26 @@
-#,Quesito,Percentuale sicurezza,Risoluzione,Ambito,Note
-1,"Il Candidato illustri gli aspetti di rilievo che riguardano lo studio delle correnti
-idrauliche","90,00%",,Idraulica,
-2,"Descrivere il comportamento costitutivo dell'acciaio e del calcestruzzo armato con particolare
+Ambito,Quesito,Percentuale sicurezza,Risoluzione,Note,,#
+Idraulica,"Il Candidato illustri gli aspetti di rilievo che riguardano lo studio delle correnti
+idrauliche","90,00%",,,,1
+Strutture,"Descrivere il comportamento costitutivo dell'acciaio e del calcestruzzo armato con particolare
 riferimento alle proprietà di elasticità (anelasticità), linearità (non linearità), isotropia (anisotropia), duttilità, viscosità e risposta ciclica. (E tra l'altro espressamente richiesta la
 derivazione del legame costitutivo elastico, lineare, isotropo e omogeneo alla base della
-teoria della trave).","10,00%",,Strutture,
-3,"Si illustri una relazione generale di progetto per la realizzazione di un'opera di ingegneria edile indicando la
+teoria della trave).","10,00%",,,,2
+,"Si illustri una relazione generale di progetto per la realizzazione di un'opera di ingegneria edile indicando la
 normativa diriferimento, i principali criteri di scelta da adottare evidenziando le principali problematiche
-da considerare in relazione agli aspetti ambientali.","40,00%",,,
-4,"11 Candidato descriva 1a problematica dell'accumulo dei sedimenti in fognatura
+da considerare in relazione agli aspetti ambientali.","40,00%",,,,3
+,"11 Candidato descriva 1a problematica dell'accumulo dei sedimenti in fognatura
 e ne illustri possibili strategie di controllo, soffermandosi, in particolare, sulle
 implicazioni che tale controllo determina sulf impostazione progeffuale della
-rete fognaria.","70,00%",,,
-5,"il Candidato descriva la problematica dell'accumulo dei sedimenti in fognatura
+rete fognaria.","70,00%",,,,4
+,"il Candidato descriva la problematica dell'accumulo dei sedimenti in fognatura
 e ne illustri possibili strategie di controllo, soffermandosi, in particolare, sulle
 implicazioni che tale controllo determina sull'impostazione progettuale della
-rete fognaria.","70,00%",,,
-6,"I1 Candidato illustri i criteri per lo studio della trattabilità biologica di
+rete fognaria.","70,00%",,,,5
+,"I1 Candidato illustri i criteri per lo studio della trattabilità biologica di
 reflui industriali/rifiuti liquidi. Inoltre, si riportino le problematiche
 gestionali \egate all'utilizzo dei processi biologici nel trattamento di tali
-reflui e le relative proposte di intervento.","80,00%",,,
-7,"la pianificazione, la progettazione, lo sviluppo,
+reflui e le relative proposte di intervento.","80,00%",,,,6
+,"la pianificazione, la progettazione, lo sviluppo,
 la direzione lavori, la stima, il collaudo, la gestione, la valutazione di impatto ambientale di opere
 edili e strutture, infrastrutture, territoriali e di trasporto, di opere per la difesa del suolo e per il
 disinquinamento e la depurazione, di opere geotecniche, di sistemi e impianti civili e per l'ambiente
@@ -35,57 +35,57 @@ inquinamento (inteso come riduzione degli effetti)
 progettazione e direzione lavori (aspetti di calcolo, normativi e operativi)
 II candidato articoli il suo elaborato tenendo conto dei seguenti fattori: ambito di
 applicazione, stato dell'arte, costi e benefici, procedure preferite, valutazione delle
-soluzioni tecniche, tutele e aspetti normativi e legislativi.","0,00%",,,
-8,"II Candidato descriva la problematica del calcolo delle portate di piena attraverso i modelli
+soluzioni tecniche, tutele e aspetti normativi e legislativi.","0,00%",,,,7
+,"II Candidato descriva la problematica del calcolo delle portate di piena attraverso i modelli
 afflussi-deflussi applicati, in particolare, all'ambito dei bacini naturali, oppure, a sua scelta,
 discuta la problematica della gestione dei fanghi prodotti dalla depurazione degli scarichi
 urbani, soffermandosi in particolare sugli aspetti normativi che ne regolamentano il
-recupero in agricoltura (normativa tecnica nazionale e regionale).","0,00%",,,
-9,"Il candidato illustri, anche attraverso esempi, l’impatto dell’innovazione tecnologica di prodotto
-e/o di processo nel progetto di architettura.","50,00%",,,
-10,"Il candidato esponga le sue conoscenze in tema di strutture in cemento armato con particolare riferimento
+recupero in agricoltura (normativa tecnica nazionale e regionale).","0,00%",,,,8
+,"Il candidato illustri, anche attraverso esempi, l’impatto dell’innovazione tecnologica di prodotto
+e/o di processo nel progetto di architettura.","50,00%",,,,9
+,"Il candidato esponga le sue conoscenze in tema di strutture in cemento armato con particolare riferimento
 a:
 1. Comportamento costitutivo dei materiali componenti;
 2. Meccanismi di rottura della sezione;
-3. Aspetti normativi e progettuali.","50,00%","Il cemento armato (c.a.) si basa sulla collaborazione tra calcestruzzo, materiale con ottima resistenza a compressione ma scarsa a trazione, e acciaio, che sopperisce a tale carenza. Tale simbiosi è resa possibile dall’aderenza tra i due materiali e dalla similarità dei loro coefficienti di dilatazione termica.Di seguito si espongono i tre punti cardine richiesti.1. Comportamento costitutivo dei materiali componentiIl comportamento globale della struttura dipende dalle leggi sforzo-deformazione ($\sigma-\varepsilon$) dei singoli materiali:Calcestruzzo (Conglomerato Cementizio)Il calcestruzzo ha un comportamento non lineare e fragile. Per il calcolo allo Stato Limite Ultimo (SLU), la normativa (NTC 2018) adotta convenzionalmente il diagramma parabola-rettangolo:Tratto parabolico: Da $\varepsilon = 0$ fino alla deformazione di picco $\varepsilon_{c2} \approx 0.2\%$, dove la tensione raggiunge il valore di calcolo $f_{cd}$.Tratto rettangolare (plasticizzazione): Da $\varepsilon_{c2}$ fino alla deformazione ultima $\varepsilon_{cu} \approx 0.35\%$.In trazione, la resistenza è solitamente trascurata nei calcoli di resistenza della sezione, pur essendo fondamentale per lo studio della fessurazione e dell'aderenza.Acciaio per armatureL'acciaio ha un comportamento elastico-plastico. Il modello di calcolo è tipicamente il bilineare indefinito o con incrudimento:Tratto elastico: Definito dal modulo di Young $E_s \approx 210.000$ MPa, valido fino allo snervamento ($f_{yd}$).Tratto plastico: Caratterizzato da grandi deformazioni con tensione costante (o leggermente crescente). La deformazione ultima di progetto $\varepsilon_{ud}$ è limitata per garantire la duttilità.2. Meccanismi di rottura della sezioneL'analisi della sezione avviene tramite l'ipotesi di conservazione delle sezioni piane (Bernoulli) e perfetta aderenza. La rottura è definita dal raggiungimento dei limiti di deformazione dei materiali.Flessione Semplice e CompostaSi distinguono tre tipologie di crisi in base alla quantità di armatura:Crisi Fragile (Lato Calcestruzzo): Sezione ""sovra-armata"". Il calcestruzzo raggiunge $\varepsilon_{cu}$ prima che l'acciaio snervi. La rottura è improvvisa e senza preavviso (da evitare in progettazione).Crisi Duttile (Lato Acciaio): Sezione ""sotto-armata"". L'acciaio snerva ampiamente prima della crisi del calcestruzzo. Questo garantisce ampie fessurazioni e deformazioni che avvertono dell'imminente collasso.Bilanciata: Raggiungimento simultaneo dei limiti ultimi.Taglio (Meccanismi Resistenti)A differenza della flessione, la resistenza al taglio è modellata tramite l'analogia del Traliccio di Mörsch-Ritter. La sezione resiste grazie a:Bielle di compressione: Il calcestruzzo inclinato (tipicamente tra 21° e 45°).Tiranti: Le armature trasversali (staffe) e longitudinali.La crisi può avvenire per schiacciamento della biella di calcestruzzo o per snervamento delle staffe.3. Aspetti normativi e progettualiLa progettazione moderna segue l'approccio semi-probabilistico agli Stati Limite, normato in Italia dalle NTC 2018 (e a livello europeo dagli Eurocodici, in particolare EC2).Criteri di ProgettazioneStati Limite Ultimi (SLU): Mirano a garantire la sicurezza strutturale contro il collasso (capacità portante). Si utilizzano i coefficienti parziali di sicurezza: $\gamma_c = 1.5$ per il calcestruzzo e $\gamma_s = 1.15$ per l'acciaio.Stati Limite di Esercizio (SLE): Mirano a garantire la funzionalità, la durabilità e il comfort (controllo delle tensioni, della fessurazione e delle frecce deformative).Gerarchia delle Resistenze (Capacity Design): In ambito sismico, si progettano le strutture in modo che le crisi avvengano nei punti ""duttili"" (es. travi) proteggendo i punti ""fragili"" (es. nodi trave-pilastro o crisi per taglio).DurabilitàUn aspetto progettuale cruciale è la prescrizione del copriferro minimo e della classe di esposizione, volti a proteggere le armature dalla corrosione (carbonatazione o attacco da cloruri) per tutta la vita nominale dell'opera.Sintesi: La progettazione di strutture in c.a. non è solo un calcolo di resistenze, ma un bilanciamento tra duttilità (capacità di deformarsi senza crollare) e durabilità, operando sempre all'interno del quadro cogente delle NTC 2018.",,
-11,"L’instabilità dell’equilibrio. Il candidato relazioni nel merito con particolare riferimento a:
+3. Aspetti normativi e progettuali.","50,00%","Il cemento armato (c.a.) si basa sulla collaborazione tra calcestruzzo, materiale con ottima resistenza a compressione ma scarsa a trazione, e acciaio, che sopperisce a tale carenza. Tale simbiosi è resa possibile dall’aderenza tra i due materiali e dalla similarità dei loro coefficienti di dilatazione termica.Di seguito si espongono i tre punti cardine richiesti.1. Comportamento costitutivo dei materiali componentiIl comportamento globale della struttura dipende dalle leggi sforzo-deformazione ($\sigma-\varepsilon$) dei singoli materiali:Calcestruzzo (Conglomerato Cementizio)Il calcestruzzo ha un comportamento non lineare e fragile. Per il calcolo allo Stato Limite Ultimo (SLU), la normativa (NTC 2018) adotta convenzionalmente il diagramma parabola-rettangolo:Tratto parabolico: Da $\varepsilon = 0$ fino alla deformazione di picco $\varepsilon_{c2} \approx 0.2\%$, dove la tensione raggiunge il valore di calcolo $f_{cd}$.Tratto rettangolare (plasticizzazione): Da $\varepsilon_{c2}$ fino alla deformazione ultima $\varepsilon_{cu} \approx 0.35\%$.In trazione, la resistenza è solitamente trascurata nei calcoli di resistenza della sezione, pur essendo fondamentale per lo studio della fessurazione e dell'aderenza.Acciaio per armatureL'acciaio ha un comportamento elastico-plastico. Il modello di calcolo è tipicamente il bilineare indefinito o con incrudimento:Tratto elastico: Definito dal modulo di Young $E_s \approx 210.000$ MPa, valido fino allo snervamento ($f_{yd}$).Tratto plastico: Caratterizzato da grandi deformazioni con tensione costante (o leggermente crescente). La deformazione ultima di progetto $\varepsilon_{ud}$ è limitata per garantire la duttilità.2. Meccanismi di rottura della sezioneL'analisi della sezione avviene tramite l'ipotesi di conservazione delle sezioni piane (Bernoulli) e perfetta aderenza. La rottura è definita dal raggiungimento dei limiti di deformazione dei materiali.Flessione Semplice e CompostaSi distinguono tre tipologie di crisi in base alla quantità di armatura:Crisi Fragile (Lato Calcestruzzo): Sezione ""sovra-armata"". Il calcestruzzo raggiunge $\varepsilon_{cu}$ prima che l'acciaio snervi. La rottura è improvvisa e senza preavviso (da evitare in progettazione).Crisi Duttile (Lato Acciaio): Sezione ""sotto-armata"". L'acciaio snerva ampiamente prima della crisi del calcestruzzo. Questo garantisce ampie fessurazioni e deformazioni che avvertono dell'imminente collasso.Bilanciata: Raggiungimento simultaneo dei limiti ultimi.Taglio (Meccanismi Resistenti)A differenza della flessione, la resistenza al taglio è modellata tramite l'analogia del Traliccio di Mörsch-Ritter. La sezione resiste grazie a:Bielle di compressione: Il calcestruzzo inclinato (tipicamente tra 21° e 45°).Tiranti: Le armature trasversali (staffe) e longitudinali.La crisi può avvenire per schiacciamento della biella di calcestruzzo o per snervamento delle staffe.3. Aspetti normativi e progettualiLa progettazione moderna segue l'approccio semi-probabilistico agli Stati Limite, normato in Italia dalle NTC 2018 (e a livello europeo dagli Eurocodici, in particolare EC2).Criteri di ProgettazioneStati Limite Ultimi (SLU): Mirano a garantire la sicurezza strutturale contro il collasso (capacità portante). Si utilizzano i coefficienti parziali di sicurezza: $\gamma_c = 1.5$ per il calcestruzzo e $\gamma_s = 1.15$ per l'acciaio.Stati Limite di Esercizio (SLE): Mirano a garantire la funzionalità, la durabilità e il comfort (controllo delle tensioni, della fessurazione e delle frecce deformative).Gerarchia delle Resistenze (Capacity Design): In ambito sismico, si progettano le strutture in modo che le crisi avvengano nei punti ""duttili"" (es. travi) proteggendo i punti ""fragili"" (es. nodi trave-pilastro o crisi per taglio).DurabilitàUn aspetto progettuale cruciale è la prescrizione del copriferro minimo e della classe di esposizione, volti a proteggere le armature dalla corrosione (carbonatazione o attacco da cloruri) per tutta la vita nominale dell'opera.Sintesi: La progettazione di strutture in c.a. non è solo un calcolo di resistenze, ma un bilanciamento tra duttilità (capacità di deformarsi senza crollare) e durabilità, operando sempre all'interno del quadro cogente delle NTC 2018.",,,10
+,"L’instabilità dell’equilibrio. Il candidato relazioni nel merito con particolare riferimento a:
 1. Descrizione ingegneristica del fenomeno;
 2. Esposizione, trattazione analitica ed esempi significativi del fenomeno dell’instabilità dell’equilibrio
 in regime di presso-flessione e flesso-torsione;
-3. Aspetti normativi e progettuali","30,00%",,,
-12,"Il candidato esponga i concetti di struttura isostatica e iperstatica fornendo esempi applicativi al
-riguardo.","90,00%",,,
-13,"L’acciaio quale materiale da costruzione. Il candidato esponga le sue conoscenze in merito con
+3. Aspetti normativi e progettuali","30,00%",,,,11
+,"Il candidato esponga i concetti di struttura isostatica e iperstatica fornendo esempi applicativi al
+riguardo.","90,00%",,,,12
+,"L’acciaio quale materiale da costruzione. Il candidato esponga le sue conoscenze in merito con
 particolare riferimento a:
 1. Comportamento costitutivo (linearità, snervamento, nonlinearità, duttilità, rottura);
 2. Classificazione dei profili e sue motivazioni;
 3. Connessioni;
-4. Solai. ","50,00%",,,
-14,"Il candidato tratti a sua scelta uno dei seguenti temi:
+4. Solai. ","50,00%",,,,13
+,"Il candidato tratti a sua scelta uno dei seguenti temi:
 a- Con riferimento alla progettazione e all’esecuzione di un’opera di ingegneria nella
  propria area di competenza, esponga il quadro normativo vigente evidenziando
  i ruoli e gli oneri cui l’ingegnere è soggetto ivi compresi, oltre a quelli strettamente
  tecnici, i rapporti con la committenza nei casi di opera pubblica o privata
 
-","20,00%",,,
-35,"b- Descriva i processi depurativi (chimici e biologici) utilizzati per la depurazione delle
-acque di scarico civili.","80,00%",,,
-36,c- Descriva le caratteristiche principali dei sistemi di fognatura urbana.,"80,00%",,,
-15,"Fatto riferimento a sezioni in cemento armato (travi e pilastri) sollecitate a flessione
+","20,00%",,,,14
+,"b- Descriva i processi depurativi (chimici e biologici) utilizzati per la depurazione delle
+acque di scarico civili.","80,00%",,,,35
+,c- Descriva le caratteristiche principali dei sistemi di fognatura urbana.,"80,00%",,,,36
+,"Fatto riferimento a sezioni in cemento armato (travi e pilastri) sollecitate a flessione
  retta, riportare la trattazione di Saint Venant per il calcolo delle componenti normali
  di sforzo che ne conseguono.
  Successivamente, anche alla luce delle vigenti Norme Tecniche per le Costruzioni,
  delineare i metodi per Il calcolo e la verifica delle armature longitudinali in strutture
  in cemento armato.
-","20,00%",,,
-33,"Illustrare un possibile schema impiantistico per la potabilizzazione di un’acqua attinta
+","20,00%",,,,15
+,"Illustrare un possibile schema impiantistico per la potabilizzazione di un’acqua attinta
  da falda profonda contenente ferro, manganese e arsenico riportando, per ciascun
 trattamento, finalità, vantaggi /svantaggi e parametri di dimensionamento.
-","20,00%",,,
-34,"b- c- Illustrare le problematiche connesse con le velocità minime di autopulizia nei
+","20,00%",,,,33
+,"b- c- Illustrare le problematiche connesse con le velocità minime di autopulizia nei
 condotti di fognatura di sistemi misto e separato e i possibili interventi per la
-rimozione dei sedimenti.","80,00%",,,
-16,"Il Candidato illustri il ruolo dell’ingegnere e delle tecniche ingegneristiche
+rimozione dei sedimenti.","80,00%",,,,34
+,"Il Candidato illustri il ruolo dell’ingegnere e delle tecniche ingegneristiche
 nell’attività di protezione del territorio e dell’ambiente. Illustri e discuta, con
 riferimento all’ambito del proprio settore, anche tenendo conto degli aspetti di
 etica professionale, quali sono le priorità, le tecnologie, le sinergie e i contributi
@@ -160,13 +160,13 @@ Indipendenza e Integrità di Giudizio: Nelle valutazioni di impatto (VIA, VAS) e
 Trasparenza e Divulgazione: Capacità di comunicare i rischi e le scelte progettuali alla cittadinanza in modo chiaro, scientifico e privo di tecnicismi barocchi, favorendo processi partecipativi e riducendo l'opposizione sociale (sindrome NIMBY - Not In My Back Yard).
 
 Conclusione
-L’ingegnere, attraverso l'uso consapevole delle tecnologie e una solida preparazione multidisciplinare, non è più un mero ""costruttore"", bensì un custode attivo del territorio. Il successo della sua azione risiede nella capacità di coniugare il rigore quantitativo dell'ingegneria con il rispetto delle dinamiche naturali e i vincoli etici della professione, garantendo uno sviluppo che sia realmente sostenibile e resiliente per le sfide del XXI secolo.",,
-17,"Il candidato tratti a sua scelta uno dei seguenti temi:
+L’ingegnere, attraverso l'uso consapevole delle tecnologie e una solida preparazione multidisciplinare, non è più un mero ""costruttore"", bensì un custode attivo del territorio. Il successo della sua azione risiede nella capacità di coniugare il rigore quantitativo dell'ingegneria con il rispetto delle dinamiche naturali e i vincoli etici della professione, garantendo uno sviluppo che sia realmente sostenibile e resiliente per le sfide del XXI secolo.",,,16
+,"Il candidato tratti a sua scelta uno dei seguenti temi:
 - l’Autorizzazione Integrata Ambientale (AIA), discutendo la normativa di riferimento e
  illustrando la sua applicazione nel campo del trattamento dei rifiuti.
 - i sistemi di difesa dalle piene in ambito urbano e naturale, con particolare riferimento a:
-tipologie e funzioni, criteri di scelta delle opere, e criteri di progettazione delle opere.","0,00%",,,
-18,"a - Un collettore fognario raccoglie i reflui di un’area industriale e li convoglia in un
+tipologie e funzioni, criteri di scelta delle opere, e criteri di progettazione delle opere.","0,00%",,,,17
+,"a - Un collettore fognario raccoglie i reflui di un’area industriale e li convoglia in un
 impianto di depurazione che tratta esclusivamente tali scarichi. Le caratteristiche medie
 dei reflui industriali convogliati al depuratore sono:
 • portata 150 m3 h-1
@@ -191,62 +191,62 @@ trattamento per la depurazione del liquame industriale composta da:
 tenendo conto del rispetto dei limiti normativi riportati nel Dlgs 152/2006 Parte III
 Allegato 5 Tab.3 (scarico in corpo idrico).
 Il candidato individui i processi idonei per trattare i fanghi generati dalla linea acque e li
-dimensioni. Infine, si disegni la planimetria dell’intero impianto.","0,00%",,,
-19,"Il candidato descriva l'impatto delle acque meteoriche su un sistema costituito da fognatura di tipo
+dimensioni. Infine, si disegni la planimetria dell’intero impianto.","0,00%",,,,18
+,"Il candidato descriva l'impatto delle acque meteoriche su un sistema costituito da fognatura di tipo
 unitario e impianto di depurazione delle acque reflue.
 Illustri altresì le possibili soluzioni tecniche da porre in essere per ridurre l'apporto di acque
 meteoriche non suscettibili di contaminazione in fognatura di tipo misto e all'impianto di
-depurazione.","20,00%",,,
-20,"Il Candidato descriva le fasi di cui si compone il PROCESSO A FANGHI ATTIVI, i parametri di influenza
-e le modalità di influenza, nonché i parametri di dimensionamento.","80,00%",,,
-21,"Il Candidato esponga il concetto di valutazione della sicurezza strutturale con metodi probabilistici
+depurazione.","20,00%",,,,19
+,"Il Candidato descriva le fasi di cui si compone il PROCESSO A FANGHI ATTIVI, i parametri di influenza
+e le modalità di influenza, nonché i parametri di dimensionamento.","80,00%",,,,20
+,"Il Candidato esponga il concetto di valutazione della sicurezza strutturale con metodi probabilistici
 secondo le Norme Tecniche per le Costruzioni:
 Aspetti probabilistici nella definizione dei carichi agenti e della resistenza dei materiali;
 Metodi di valutazione della sicurezza strutturale probabilistici e semi-probabilistici con
 particolare riferimento a:
 o Casi di carico e loro combinazione;
 o Stati Limite Ultimi e di Esercizio;
-o Ruolo dell'azione sismica.","30,00%",,,
-22,"Il candidato illustri le ricadute delle tematiche relative alla sostenibilità ambientale e allo sviluppo
-sostenibile nel progetto di architettura alla scala edilizia e/o urbana.","60,00%",,,
-23,"Il candidato definisca il significato di ""sistema di drenaggio urbano"" e descriva funzioni e
-caratteristiche dei sistemi unitari e dei sistemi separati.","0,00%",,,
-24,"Candidato elenchi e descriva le fasi di cui si compone un impianto di depurazione che tratta
-esclusivamente reflui urbani.","0,00%",,,
-25,"Il candidato definisca il significato di ""impianto di distribuzione"" di un acquedotto e descriva:
+o Ruolo dell'azione sismica.","30,00%",,,,21
+,"Il candidato illustri le ricadute delle tematiche relative alla sostenibilità ambientale e allo sviluppo
+sostenibile nel progetto di architettura alla scala edilizia e/o urbana.","60,00%",,,,22
+,"Il candidato definisca il significato di ""sistema di drenaggio urbano"" e descriva funzioni e
+caratteristiche dei sistemi unitari e dei sistemi separati.","0,00%",,,,23
+,"Candidato elenchi e descriva le fasi di cui si compone un impianto di depurazione che tratta
+esclusivamente reflui urbani.","0,00%",,,,24
+,"Il candidato definisca il significato di ""impianto di distribuzione"" di un acquedotto e descriva:
 i compiti cui una rete di distribuzione idrica deve assolvere;
 i fabbisogni potabili e sanitari da assumere per il dimensionamento e la verifica di una rete di
 distribuzione idrica;
-le condizioni di esercizio che una rete di distribuzione idrica deve in ogni caso garantire.","0,00%",,,
-26,Il candidato elenchi e descriva le alternative di smaltimento e recupero dei RSU.,"0,00%",,,
-27,"Il candidato scelga un’opera di Ingegneria civile e/o ambientale e formuli l’indice della relazione
+le condizioni di esercizio che una rete di distribuzione idrica deve in ogni caso garantire.","0,00%",,,,25
+,Il candidato elenchi e descriva le alternative di smaltimento e recupero dei RSU.,"0,00%",,,,26
+,"Il candidato scelga un’opera di Ingegneria civile e/o ambientale e formuli l’indice della relazione
 tecnica di accompagnamento al progetto (di tipo definitivo). Di ogni capitolo dell’indice descriva
 sinteticamente il contenuto, evidenziando in particolare le finalità, le metodologie e i risultati attesi.
 Il candidato elenchi inoltre gli elaborati (grafici e/o di altro tipo) che, a suo avviso, devono
-costituire la documentazione progettuale.","0,00%",,,
-28,"Il candidato descriva le alternative impiantistiche per la rimozione dalle acque di scarico dell’azoto
+costituire la documentazione progettuale.","0,00%",,,,27
+,"Il candidato descriva le alternative impiantistiche per la rimozione dalle acque di scarico dell’azoto
 nitrico riportando per ciascun comparto i criteri di dimensionamento e le modalità di calcolo dei
-ricircoli.","0,00%",,,
-29,"Il candidato descriva i principali interventi strutturali e non strutturali per la difesa idraulica del
-territorio e la mitigazione del rischio di alluvione.","0,00%",,,
-30,"Nel quadro generale di cui ai paragrafi “4.2 Costruzioni in Acciaio” e “11.3 Acciaio” del Decreto
+ricircoli.","0,00%",,,,28
+,"Il candidato descriva i principali interventi strutturali e non strutturali per la difesa idraulica del
+territorio e la mitigazione del rischio di alluvione.","0,00%",,,,29
+,"Nel quadro generale di cui ai paragrafi “4.2 Costruzioni in Acciaio” e “11.3 Acciaio” del Decreto
 Ministeriale 17 gennaio 2018 – Norme Tecniche per le Costruzioni, il candidato riferisca in merito
 a:
 • Comportamento costitutivo: fase elastica, fase plastica, viscosità, duttilità e rottura.
 • Classificazione delle sezioni: motivazioni, definizioni e ricadute progettuali.
 • Acciai per calcestruzzo armato, calcestruzzo armato precompresso e per strutture metalliche:
 aspetti generali, classificazione, proprietà meccaniche, prove e controlli di accettazione in
-cantiere.","0,00%",,,
-31,"Il candidato descriva le alternative impiantistiche per la rimozione dalle acque di scarico dell’azoto
+cantiere.","0,00%",,,,30
+,"Il candidato descriva le alternative impiantistiche per la rimozione dalle acque di scarico dell’azoto
 nitrico riportando per ciascun comparto i criteri di dimensionamento e le modalità di calcolo dei
-ricircoli.","0,00%",,,
-32,"Il candidato descriva i principali interventi strutturali e non strutturali per la difesa idraulica del
-territorio e la mitigazione del rischio di alluvione.","0,00%",,,
-33,"Nel quadro generale di cui ai paragrafi “4.2 Costruzioni in Acciaio” e “11.3 Acciaio” del Decreto
+ricircoli.","0,00%",,,,31
+,"Il candidato descriva i principali interventi strutturali e non strutturali per la difesa idraulica del
+territorio e la mitigazione del rischio di alluvione.","0,00%",,,,32
+,"Nel quadro generale di cui ai paragrafi “4.2 Costruzioni in Acciaio” e “11.3 Acciaio” del Decreto
 Ministeriale 17 gennaio 2018 – Norme Tecniche per le Costruzioni, il candidato riferisca in merito
 a:
 • Comportamento costitutivo: fase elastica, fase plastica, viscosità, duttilità e rottura.
 • Classificazione delle sezioni: motivazioni, definizioni e ricadute progettuali.
 • Acciai per calcestruzzo armato, calcestruzzo armato precompresso e per strutture metalliche:
 aspetti generali, classificazione, proprietà meccaniche, prove e controlli di accettazione in
-cantiere.","0,00%",,,
+cantiere.","0,00%",,,,33
