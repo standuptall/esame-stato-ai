@@ -1,5 +1,6 @@
 import streamlit as st
-from streamlit_gsheets import GSheetsConnection
+import gspread
+from google.oauth2.service_account import Credentials
 from google import genai
 import json
 import random
@@ -17,14 +18,13 @@ st.set_page_config(
 # 2. Configurazione delle API (Recuperate in sicurezza dai Secrets di Streamlit)
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
-# 3. Connessione a Google Sheets con decodifica dinamica della chiave privata
+# 3. Connessione a Google Sheets tramite gspread
 try:
-    # 1. Recuperiamo la stringa Base64 e la decodifichiamo
     private_key_b64 = st.secrets["connections"]["gsheets"]["private_key_base64"]
     private_key_pem = base64.b64decode(private_key_b64).decode("utf-8")
     
-    # 2. Ricostruiamo il dizionario delle credenziali (senza 'type' e senza 'spreadsheet')
-    credenziali_complete = {
+    credenziali_dict = {
+        "type": "service_account",
         "project_id": st.secrets["connections"]["gsheets"]["project_id"],
         "private_key_id": st.secrets["connections"]["gsheets"]["private_key_id"],
         "private_key": private_key_pem,
@@ -36,16 +36,14 @@ try:
         "client_x509_cert_url": st.secrets["connections"]["gsheets"]["client_x509_cert_url"]
     }
     
-    # 3. Inizializziamo la connessione passando SOLO i parametri del Service Account
-    conn = st.connection(
-        "gsheets", 
-        type=GSheetsConnection,
-        **credenziali_complete
-    )
+    scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+    creds = Credentials.from_service_account_info(credenziali_dict, scopes=scopes)
+    gc = gspread.authorize(creds)
     
-    # 4. Passiamo l'URL del foglio Google esplicitamente dentro conn.read()
     url_foglio = st.secrets["connections"]["gsheets"]["spreadsheet"]
-    df = conn.read(spreadsheet=url_foglio, ttl="0")
+    worksheet = gc.open_by_url(url_foglio).get_worksheet(0)
+    
+    df = pd.DataFrame(worksheet.get_all_records())
     
     # Sanitizzazione dei dati in lettura
     df["Percentuale sicurezza"] = pd.to_numeric(df["Percentuale sicurezza"], errors="coerce")
@@ -177,16 +175,13 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
                     nuova_percentuale = dati_valutazione['nuova_percentuale']
                     risoluzione_corretta = dati_valutazione['risoluzione_sintetica']
                     
-                    # Convertiamo temporaneamente l'intero DataFrame in stringhe per evitare 
-                    # conflitti di tipi (dtype mismatch) con la libreria gsheets e pandas durante l'upload
-                    df_upload = df.copy().astype(str)
-                    
-                    # Aggiornamento dei dati sulla copia stringa
-                    df_upload.at[indice_riga, "Percentuale sicurezza"] = str(nuova_percentuale)
-                    df_upload.at[indice_riga, "Risoluzione"] = str(risoluzione_corretta)
-                    
-                    # Salvataggio tramite la connessione (scrivendo le stringhe)
-                    conn.update(data=df_upload)
+                    # Aggiornamento diretto delle celle nel foglio Google
+                    intestazioni = df.columns.tolist()
+                    col_perc = intestazioni.index("Percentuale sicurezza") + 1
+                    col_risol = intestazioni.index("Risoluzione") + 1
+                    riga_sheet = indice_riga + 2  # +1 per header, +1 per indice 1-based
+                    worksheet.update_cell(riga_sheet, col_perc, nuova_percentuale)
+                    worksheet.update_cell(riga_sheet, col_risol, str(risoluzione_corretta))
                     
                     st.success(f"Aggiornamento completato! Nuova percentuale di sicurezza registrata sul foglio: {nuova_percentuale}%")
                     
