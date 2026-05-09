@@ -1,8 +1,10 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import google.generativeai as genai
+from google.api_core.exceptions import ResourceExhausted
 import json
 import random
+import time
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
@@ -104,7 +106,18 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
             """
             
             model = genai.GenerativeModel('gemini-2.0-flash')
-            response = model.generate_content(prompt_docente)
+            for attempt in range(3):
+                try:
+                    response = model.generate_content(prompt_docente)
+                    break
+                except ResourceExhausted:
+                    if attempt < 2:
+                        wait = 30 * (attempt + 1)
+                        st.warning(f"Limite di richieste API raggiunto. Riprovo tra {wait} secondi...")
+                        time.sleep(wait)
+                    else:
+                        st.error("Quota API esaurita. Attendi qualche minuto e riprova.")
+                        st.stop()
             
             # Parsing della risposta (cercando il JSON all'interno del testo generato)
             try:
