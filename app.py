@@ -5,7 +5,7 @@ import json
 import random
 import time
 import pandas as pd
-import base64  # <--- ASSICURATI DI IMPORTARE QUESTO MODULO NATIVO
+import base64
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
@@ -19,17 +19,33 @@ client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 # 3. Connessione a Google Sheets con decodifica dinamica della chiave privata
 try:
-    # Recuperiamo la stringa Base64 dai Secrets
+    # 1. Recuperiamo la stringa Base64 e la decodifichiamo
     private_key_b64 = st.secrets["connections"]["gsheets"]["private_key_base64"]
-    
-    # La decodifichiamo nel formato PEM originale con i corretti ritorni a capo
     private_key_pem = base64.b64decode(private_key_b64).decode("utf-8")
     
-    # Sovrascriviamo temporaneamente la configurazione in memoria per st.connection
-    st.secrets["connections"]["gsheets"]["private_key"] = private_key_pem
+    # 2. Ricostruiamo il dizionario completo delle credenziali attingendo dai Secrets
+    # e inserendo la chiave PEM decodificata al volo
+    credenziali_complete = {
+        "type": "service_account",
+        "project_id": st.secrets["connections"]["gsheets"]["project_id"],
+        "private_key_id": st.secrets["connections"]["gsheets"]["private_key_id"],
+        "private_key": private_key_pem,
+        "client_email": st.secrets["connections"]["gsheets"]["client_email"],
+        "client_id": st.secrets["connections"]["gsheets"]["client_id"],
+        "auth_uri": st.secrets["connections"]["gsheets"]["auth_uri"],
+        "token_uri": st.secrets["connections"]["gsheets"]["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["connections"]["gsheets"]["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": st.secrets["connections"]["gsheets"]["client_x509_cert_url"]
+    }
     
-    # Avviamo la connessione ora che la chiave in memoria è perfettamente formattata
-    conn = st.connection("gsheets", type=GSheetsConnection)
+    # 3. Avviamo la connessione passando esplicitamente i parametri
+    conn = st.connection(
+        "gsheets", 
+        type=GSheetsConnection,
+        spreadsheet=st.secrets["connections"]["gsheets"]["spreadsheet"],
+        **credenziali_complete  # Scompatta il dizionario di credenziali corrette
+    )
+    
     df = conn.read(ttl="0")
     
     # Sanitizzazione dei dati in lettura
