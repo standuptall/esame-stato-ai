@@ -29,6 +29,7 @@ try:
     df["Percentuale sicurezza"] = df["Percentuale sicurezza"].fillna(0).astype(int)
     # ------------------------------------
 except Exception as e:
+    st.write(str(e))
     st.error("Errore di connessione al database Google Sheets. Verifica le credenziali.")
     st.stop()
 
