@@ -5,6 +5,7 @@ from google.api_core.exceptions import ResourceExhausted
 import json
 import random
 import time
+import pandas as pd  # <--- ASSICURATI CHE QUESTA RIGA SIA PRESENTE
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
