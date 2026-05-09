@@ -30,6 +30,17 @@ def salva_dati(df):
 
 df = carica_dati()
 
+# Sidebar: download CSV aggiornato
+with st.sidebar:
+    st.markdown("### 📥 Esporta dati")
+    st.download_button(
+        label="Scarica quesiti.csv aggiornato",
+        data=df.to_csv(index=False).encode("utf-8"),
+        file_name="quesiti.csv",
+        mime="text/csv",
+        use_container_width=True
+    )
+
 # 4. Selezione del Quesito (Interfaccia Mobile-Friendly)
 st.title("🎓 Preparatore Esame di Stato")
 st.write("Il programma estrae automaticamente un quesito, dando priorità agli argomenti meno studiati.")
