@@ -28,7 +28,15 @@ st.title("🎓 Preparatore Esame di Stato")
 st.write("Il programma estrae automaticamente un quesito, dando priorità agli argomenti meno studiati.")
 
 # Calcolo dei pesi: più bassa è la percentuale (o assente), maggiore è la priorità
-percentuali = df["Percentuale sicurezza"].fillna(0).astype(float)
+percentuali = (
+    df["Percentuale sicurezza"]
+    .astype(str)
+    .str.replace("%", "", regex=False)
+    .str.replace(",", ".", regex=False)
+    .str.strip()
+    .replace("nan", "0")
+    .astype(float)
+)
 pesi = (100 - percentuali + 1).tolist()  # peso minimo 1 (100%), massimo 101 (0%/NaN)
 
 def estrai_quesito():
