@@ -35,7 +35,10 @@ percentuali = (
     .str.replace(",", ".", regex=False)
     .str.strip()
     .replace("nan", "0")
+    .replace("", "0")
     .astype(float)
+    .fillna(0)
+    .clip(0, 100)
 )
 pesi = (100 - percentuali + 1).tolist()  # peso minimo 1 (100%), massimo 101 (0%/NaN)
 
