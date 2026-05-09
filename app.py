@@ -21,6 +21,12 @@ client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
     df = conn.read(ttl="0") # ttl=0 forza la lettura dei dati in tempo reale
+    # --- NUOVA RIGA DI SANITIZZAZIONE ---
+    # Converte la colonna in numerica. I valori non validi (testi, spazi) diventano NaN (vuoti)
+    df["Percentuale sicurezza"] = pd.to_numeric(df["Percentuale sicurezza"], errors="coerce")
+    # Riempie i valori vuoti (NaN) con lo 0 di default e converte tutto in interi (int)
+    df["Percentuale sicurezza"] = df["Percentuale sicurezza"].fillna(0).astype(int)
+    # ------------------------------------
 except Exception as e:
     st.error("Errore di connessione al database Google Sheets. Verifica le credenziali.")
     st.stop()
