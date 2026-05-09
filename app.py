@@ -5,6 +5,7 @@ import random
 import time
 import pandas as pd
 import os
+import io
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
@@ -16,28 +17,31 @@ st.set_page_config(
 # 2. Configurazione delle API
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
-# 3. Caricamento dati da file CSV locale
-CSV_PATH = os.path.join(os.path.dirname(__file__), "quesiti.csv")
+# 3. Caricamento dati da file Excel locale
+CSV_PATH = os.path.join(os.path.dirname(__file__), "quesiti.xlsx")
 
 def carica_dati():
-    df = pd.read_csv(CSV_PATH, dtype={"Percentuale sicurezza": float})
+    df = pd.read_excel(CSV_PATH, dtype={"Percentuale sicurezza": float})
     df["Percentuale sicurezza"] = df["Percentuale sicurezza"].fillna(0).astype(int)
     df["Risoluzione"] = df["Risoluzione"].fillna("")
     return df
 
 def salva_dati(df):
-    df.to_csv(CSV_PATH, index=False)
+    df.to_excel(CSV_PATH, index=False)
 
 df = carica_dati()
 
 # Sidebar: download CSV aggiornato
 with st.sidebar:
     st.markdown("### 📥 Esporta dati")
+    buffer = io.BytesIO()
+    df.to_excel(buffer, index=False)
+    buffer.seek(0)
     st.download_button(
-        label="Scarica quesiti.csv aggiornato",
-        data=df.to_csv(index=False).encode("utf-8"),
-        file_name="quesiti.csv",
-        mime="text/csv",
+        label="Scarica quesiti.xlsx aggiornato",
+        data=buffer,
+        file_name="quesiti.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True
     )
 
