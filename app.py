@@ -5,6 +5,7 @@ import json
 import random
 import time
 import pandas as pd
+import base64  # <--- ASSICURATI DI IMPORTARE QUESTO MODULO NATIVO
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
@@ -16,10 +17,20 @@ st.set_page_config(
 # 2. Configurazione delle API (Recuperate in sicurezza dai Secrets di Streamlit)
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
-# 3. Connessione a Google Sheets
+# 3. Connessione a Google Sheets con decodifica dinamica della chiave privata
 try:
+    # Recuperiamo la stringa Base64 dai Secrets
+    private_key_b64 = st.secrets["connections"]["gsheets"]["private_key_base64"]
+    
+    # La decodifichiamo nel formato PEM originale con i corretti ritorni a capo
+    private_key_pem = base64.b64decode(private_key_b64).decode("utf-8")
+    
+    # Sovrascriviamo temporaneamente la configurazione in memoria per st.connection
+    st.secrets["connections"]["gsheets"]["private_key"] = private_key_pem
+    
+    # Avviamo la connessione ora che la chiave in memoria è perfettamente formattata
     conn = st.connection("gsheets", type=GSheetsConnection)
-    df = conn.read(ttl="0") # ttl=0 forza la lettura dei dati in tempo reale
+    df = conn.read(ttl="0")
     
     # Sanitizzazione dei dati in lettura
     df["Percentuale sicurezza"] = pd.to_numeric(df["Percentuale sicurezza"], errors="coerce")
