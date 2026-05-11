@@ -18,8 +18,8 @@ client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 # 3. Gestione archivio JSON
 JSON_PATH = os.path.join(os.path.dirname(__file__), "quesiti.json")
-CSV_PATH = os.path.join(os.path.dirname(__file__), "quesiti.csv")
-CSV_BAK_PATH = os.path.join(os.path.dirname(__file__), "quesiti_bak.csv")
+CSV_PATH = os.path.join(os.path.dirname(__file__), "quesiti.xlsx")
+CSV_BAK_PATH = os.path.join(os.path.dirname(__file__), "quesiti_bak.xlsx")
 
 def carica_dati():
     if not os.path.exists(JSON_PATH):
