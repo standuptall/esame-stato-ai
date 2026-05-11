@@ -23,8 +23,8 @@ CSV_BAK_PATH = os.path.join(os.path.dirname(__file__), "quesiti_bak.xlsx")
 
 def carica_dati():
     if not os.path.exists(JSON_PATH):
-        # Prima partenza: migra da CSV e rinomina in _bak
-        df_csv = pd.read_csv(CSV_PATH, dtype={"Percentuale sicurezza": float})
+        # Prima partenza: migra da XLSX e rinomina in _bak
+        df_csv = pd.read_excel(CSV_PATH, dtype={"Percentuale sicurezza": float})
         df_csv["Percentuale sicurezza"] = df_csv["Percentuale sicurezza"].fillna(0).astype(int)
         df_csv["Risoluzione"] = df_csv["Risoluzione"].fillna("")
         records = df_csv.to_dict(orient="records")
