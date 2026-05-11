@@ -1,6 +1,8 @@
 import streamlit as st
 from google import genai
 import json
+import re
+import ast
 import random
 import time
 import pandas as pd
@@ -45,8 +47,8 @@ def salva_dati(df):
     with open(JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(records, f, ensure_ascii=False, indent=2)
 
-def sanitize_json_string(s):
-    """Escape control characters inside JSON string values to prevent parse errors."""
+def _escape_control_chars(s):
+    """Escape control characters inside JSON string values."""
     result = []
     in_string = False
     escape_next = False
@@ -72,6 +74,34 @@ def sanitize_json_string(s):
         else:
             result.append(char)
     return ''.join(result)
+
+def estrai_json_da_testo(testo):
+    """Estrae e parsa in modo robusto un blocco JSON dalla risposta del modello."""
+    # 1. Prova con blocco markdown ```json ... ``` o ``` ... ```
+    match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', testo, re.DOTALL)
+    json_candidate = match.group(1) if match else None
+
+    # 2. Fallback: cerca il primo { e l'ultimo }
+    if not json_candidate:
+        inizio = testo.find("{")
+        fine = testo.rfind("}") + 1
+        if inizio == -1 or fine == 0:
+            raise ValueError("Nessun blocco JSON trovato nella risposta.")
+        json_candidate = testo[inizio:fine]
+
+    # 3. Prova json.loads con escape dei caratteri di controllo
+    try:
+        return json.loads(_escape_control_chars(json_candidate))
+    except json.JSONDecodeError:
+        pass
+
+    # 4. Fallback: ast.literal_eval (gestisce apici singoli stile Python)
+    try:
+        return ast.literal_eval(json_candidate)
+    except Exception:
+        pass
+
+    raise ValueError("Impossibile parsare il JSON dalla risposta del modello.")
 
 df = carica_dati()
 
@@ -191,10 +221,7 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
             if response:
                 try:
                     testo_risposta = response.text
-                    inizio_json = testo_risposta.find("{")
-                    fine_json = testo_risposta.rfind("}") + 1
-                    json_str = sanitize_json_string(testo_risposta[inizio_json:fine_json])
-                    dati_valutazione = json.loads(json_str)
+                    dati_valutazione = estrai_json_da_testo(testo_risposta)
 
                     st.subheader("Valutazione del Docente:")
                     st.write(dati_valutazione['valutazione_testo'])
