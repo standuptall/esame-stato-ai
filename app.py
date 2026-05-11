@@ -29,6 +29,34 @@ def carica_dati():
 def salva_dati(df):
     df.to_excel(CSV_PATH, index=False)
 
+def sanitize_json_string(s):
+    """Escape control characters inside JSON string values to prevent parse errors."""
+    result = []
+    in_string = False
+    escape_next = False
+    for char in s:
+        if escape_next:
+            result.append(char)
+            escape_next = False
+        elif char == '\\' and in_string:
+            result.append(char)
+            escape_next = True
+        elif char == '"':
+            in_string = not in_string
+            result.append(char)
+        elif in_string and ord(char) < 0x20:
+            if char == '\n':
+                result.append('\\n')
+            elif char == '\r':
+                result.append('\\r')
+            elif char == '\t':
+                result.append('\\t')
+            else:
+                result.append('\\u{:04x}'.format(ord(char)))
+        else:
+            result.append(char)
+    return ''.join(result)
+
 df = carica_dati()
 
 # Sidebar: download CSV aggiornato
@@ -141,7 +169,8 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
                     testo_risposta = response.text
                     inizio_json = testo_risposta.find("{")
                     fine_json = testo_risposta.rfind("}") + 1
-                    dati_valutazione = json.loads(testo_risposta[inizio_json:fine_json])
+                    json_str = sanitize_json_string(testo_risposta[inizio_json:fine_json])
+                    dati_valutazione = json.loads(json_str)
 
                     st.subheader("Valutazione del Docente:")
                     st.write(dati_valutazione['valutazione_testo'])
