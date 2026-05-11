@@ -5,7 +5,6 @@ import random
 import time
 import pandas as pd
 import os
-import io
 
 # 1. Configurazione della pagina (Responsive per Mobile)
 st.set_page_config(
@@ -17,17 +16,34 @@ st.set_page_config(
 # 2. Configurazione delle API
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
-# 3. Caricamento dati da file Excel locale
-CSV_PATH = os.path.join(os.path.dirname(__file__), "quesiti.xlsx")
+# 3. Gestione archivio JSON
+JSON_PATH = os.path.join(os.path.dirname(__file__), "quesiti.json")
+CSV_PATH = os.path.join(os.path.dirname(__file__), "quesiti.csv")
+CSV_BAK_PATH = os.path.join(os.path.dirname(__file__), "quesiti_bak.csv")
 
 def carica_dati():
-    df = pd.read_excel(CSV_PATH, dtype={"Percentuale sicurezza": float})
+    if not os.path.exists(JSON_PATH):
+        # Prima partenza: migra da CSV e rinomina in _bak
+        df_csv = pd.read_csv(CSV_PATH, dtype={"Percentuale sicurezza": float})
+        df_csv["Percentuale sicurezza"] = df_csv["Percentuale sicurezza"].fillna(0).astype(int)
+        df_csv["Risoluzione"] = df_csv["Risoluzione"].fillna("")
+        records = df_csv.to_dict(orient="records")
+        with open(JSON_PATH, "w", encoding="utf-8") as f:
+            json.dump(records, f, ensure_ascii=False, indent=2)
+        os.rename(CSV_PATH, CSV_BAK_PATH)
+
+    with open(JSON_PATH, "r", encoding="utf-8") as f:
+        records = json.load(f)
+
+    df = pd.DataFrame(records)
     df["Percentuale sicurezza"] = df["Percentuale sicurezza"].fillna(0).astype(int)
     df["Risoluzione"] = df["Risoluzione"].fillna("")
     return df
 
 def salva_dati(df):
-    df.to_excel(CSV_PATH, index=False)
+    records = df.to_dict(orient="records")
+    with open(JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(records, f, ensure_ascii=False, indent=2)
 
 def sanitize_json_string(s):
     """Escape control characters inside JSON string values to prevent parse errors."""
@@ -59,17 +75,16 @@ def sanitize_json_string(s):
 
 df = carica_dati()
 
-# Sidebar: download CSV aggiornato
+# Sidebar: download JSON aggiornato
 with st.sidebar:
     st.markdown("### 📥 Esporta dati")
-    buffer = io.BytesIO()
-    df.to_excel(buffer, index=False)
-    buffer.seek(0)
+    with open(JSON_PATH, "rb") as f:
+        json_bytes = f.read()
     st.download_button(
-        label="Scarica quesiti.xlsx aggiornato",
-        data=buffer,
-        file_name="quesiti.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        label="Scarica quesiti.json",
+        data=json_bytes,
+        file_name="quesiti.json",
+        mime="application/json",
         use_container_width=True
     )
 
@@ -187,7 +202,7 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
                     nuova_percentuale = int(dati_valutazione['nuova_percentuale'])
                     risoluzione_corretta = dati_valutazione['risoluzione_sintetica']
 
-                    # Aggiornamento e salvataggio nel CSV
+                    # Aggiornamento e salvataggio nel JSON
                     df.at[indice_riga, "Percentuale sicurezza"] = nuova_percentuale
                     df.at[indice_riga, "Risoluzione"] = risoluzione_corretta
                     salva_dati(df)
