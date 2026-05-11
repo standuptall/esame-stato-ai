@@ -126,20 +126,29 @@ if st.button("Sottoponi all'Agente", use_container_width=True):
         with st.spinner("Il docente sta valutando la tua risposta..."):
 
             prompt_docente = f"""
-            Sei un severo Professore Universitario e Presidente della Commissione per l'Abilitazione alla professione di Ingegnere.
-            Valuta la risposta del candidato al seguente quesito.
+            Sei un stimato Professore Universitario e Membro della Commissione per l'Abilitazione alla professione di Ingegnere.
+            Il tuo compito è valutare la risposta del candidato in modo rigoroso, professionale ed equo. Non essere inutilmente distruttivo, ma premia la logica ingegneristica.
             
             Quesito: {riga_corrente['Quesito']}
             Risposta del candidato: {risposta_utente}
             
-            Fornisci una valutazione dettagliata, accademica e rigorosa, evidenziando errori teorici, mancanze normative o imprecisioni logiche.
-            Alla fine della tua valutazione, assegna una nuova 'Percentuale di sicurezza' (un valore intero tra 0 e 100) basandoti sulla qualità della risposta.
-            Inoltre, redigi una sintesi strutturata della 'Risoluzione ideale' che il candidato dovrebbe tenere a mente.
+            LINEE GUIDA PER LA VALUTAZIONE:
+            1. Analizza la risposta evidenziando gli aspetti corretti (passaggi logici ben strutturati, richiami normativi pertinenti, formule adeguate).
+            2. Segnala con precisione scientifica le lacune, le imprecisioni o le omissioni importanti.
+            3. Adotta un tono accademico, formale ma costruttivo (fornisci suggerimenti su come migliorare l'esposizione).
+            
+            SCALA DI ASSEGNAZIONE DELLA 'PERCENTUALE DI SICUREZZA' (Sii equilibrato!):
+            - 90-100%: Risposta eccellente, completa, rigorosa e priva di errori sostanziali.
+            - 70-89%: Buona risposta, individua i punti chiave ma presenta lievi imprecisioni o manca di qualche dettaglio secondario.
+            - 50-69%: Risposta sufficiente/discreta, dimostra di conoscere l'argomento a grandi linee ma pecca di superficialità o tralascia aspetti importanti.
+            - 30-49%: Risposta insufficiente, concetti confusi o gravi lacune teoriche/normative.
+            - 1-29%: Risposta gravemente insufficiente o quasi del tutto fuori tema.
+            - 0%: Solo ed esclusivamente se la risposta è totalmente vuota, copiata, o del tutto priva di senso (es. parole singole casuali come 'test').
             
             DEVI formattare la parte finale della tua risposta come un blocco JSON valido con le seguenti chiavi:
-            - 'valutazione_testo': (la tua spiegazione accademica dettagliata)
-            - 'nuova_percentuale': (il valore numerico intero)
-            - 'risoluzione_sintetica': (la sintesi della risoluzione corretta)
+            - 'valutazione_testo': (la tua spiegazione accademica dettagliata e costruttiva)
+            - 'nuova_percentuale': (il valore numerico intero basato sulla scala sopra descritta)
+            - 'risoluzione_sintetica': (la sintesi della risoluzione ideale/corretta)
             """
 
             response = None
